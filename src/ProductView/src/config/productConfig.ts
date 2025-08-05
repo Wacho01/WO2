@@ -139,7 +139,7 @@ export const waterOdysseyConfig: ProductConfig = {
   },
 
   model: {
-    path: "/src/ProductView/public/models/gltf/RHINO.glb",
+    path: "/models/gltf/RHINO.glb",
     scale: [0.6, 0.6, 0.6],
     position: [0, -0.6, 0],
     rotation: [0, Math.PI + (70 * Math.PI / 180), 0],

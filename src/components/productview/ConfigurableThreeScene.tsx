@@ -372,6 +372,11 @@ const ConfigurableThreeScene: React.FC<ConfigurableThreeSceneProps> = ({
 
     const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
+    
+    // Set the correct base path for ProductView models
+    if (config.model.path.startsWith('/models/')) {
+      loader.setPath('/src/ProductView/public/');
+    }
 
     // Load the model
     loadConfigurableModel(loader)

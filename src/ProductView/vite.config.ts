@@ -8,7 +8,7 @@ export default defineConfig({
   publicDir: 'public',
   server: {
     fs: {
-      allow: ['..', '../..']
+      allow: ['..', '../..', './public']
     }
   },
   build: {
