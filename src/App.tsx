@@ -8,7 +8,6 @@ import ProductGrid from './components/ProductGrid';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import AdminDashboard from './pages/AdminDashboard';
-import ProductViewer from './pages/ProductViewer';
 import { useProducts } from './hooks/useProducts';
 import { useCategories } from './hooks/useCategories';
 
@@ -19,7 +18,6 @@ function App() {
         <Routes>
           <Route path="/" element={<MainCatalog />} />
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/product/:productId" element={<ProductViewer />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
@@ -32,6 +30,7 @@ function MainCatalog() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Fetch data from Supabase
   const { 
     products, 
     loading: productsLoading, 
@@ -52,11 +51,13 @@ function MainCatalog() {
 
   const handleFilterChange = (category: string) => {
     setActiveFilter(category);
+    // Clear search when changing filters for better UX
     setSearchTerm('');
   };
 
   const handleSearchChange = (term: string) => {
     setSearchTerm(term);
+    // When searching, reset filter to 'all' to search across all products
     if (term.trim() && activeFilter !== 'all') {
       setActiveFilter('all');
     }
@@ -67,8 +68,10 @@ function MainCatalog() {
     refetchCategories();
   };
 
+  // Show loading state during intro or data loading
   const isLoading = showIntro || productsLoading || categoriesLoading;
   
+  // Show error if there's an error and intro is complete
   const hasError = !showIntro && (productsError || categoriesError);
   const errorMessage = productsError || categoriesError || '';
 

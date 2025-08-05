@@ -8,7 +8,7 @@ export default defineConfig({
   publicDir: 'public',
   server: {
     fs: {
-      allow: ['..', '../..', './public']
+      allow: ['..', '../..']
     }
   },
   build: {
@@ -29,8 +29,7 @@ export default defineConfig({
   resolve: {
     alias: {
       'three': resolve(__dirname, '../../node_modules/three'),
-      'three/addons': resolve(__dirname, '../../node_modules/three/examples/jsm'),
-      'three/nodes': resolve(__dirname, '../../node_modules/three/examples/jsm/nodes/Nodes.js')
+      'three/addons': resolve(__dirname, '../../node_modules/three/examples/jsm')
     }
   },
   assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.png', '**/*.jpg', '**/*.svg']
