@@ -19,32 +19,35 @@ export const useCategories = () => {
 
       // Check if Supabase is configured
       if (!isSupabaseConfigured()) {
-        throw new Error('Supabase is not configured. Please set up your environment variables.');
+        // Return default categories when Supabase is not configured
+        setCategories([
+          { id: 'all', label: 'All', disabled: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+          { id: 'funforms', label: 'Fun Forms', disabled: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+          { id: 'colorcast', label: 'Color Cast', disabled: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+          { id: 'themed', label: 'Themed Essentials', disabled: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }
+        ]);
+        setLoading(false);
+        return;
       }
 
-      console.log('Fetching categories...');
-      
       // Test connection first
       const connectionTest = await testConnection();
       if (!connectionTest) {
         throw new Error('Unable to connect to Supabase. Please check your configuration and network connection.');
       }
 
-      const { data, error: supabaseError } = await supabase!
+      const { data, error: supabaseError } = await supabase
         .from('categories')
         .select('*')
         .order('created_at', { ascending: true });
 
       if (supabaseError) {
-        console.error('Supabase query error:', supabaseError);
         const errorInfo = handleSupabaseError(supabaseError);
         throw new Error(errorInfo.message);
       }
 
-      console.log('Categories fetched successfully:', data?.length || 0, 'items');
       setCategories(data || []);
     } catch (err) {
-      console.error('Error fetching categories:', err);
       const errorInfo = err instanceof Error ? handleSupabaseError(err) : { message: 'Failed to fetch categories' };
       const errorMessage = errorInfo.message || 'Failed to fetch categories';
       setError(errorMessage);

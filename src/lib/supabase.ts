@@ -3,33 +3,11 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Debug logging to help identify configuration issues
-console.log('Supabase Configuration Debug:');
-console.log('URL:', supabaseUrl);
-console.log('Anon Key exists:', !!supabaseAnonKey);
-console.log('Current origin:', window.location.origin);
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables');
-  console.error('VITE_SUPABASE_URL:', supabaseUrl);
-  console.error('VITE_SUPABASE_ANON_KEY exists:', !!supabaseAnonKey);
-  console.error('Please check your .env file and ensure it contains:');
-  console.error('VITE_SUPABASE_URL=your-supabase-project-url');
-  console.error('VITE_SUPABASE_ANON_KEY=your-supabase-anon-key');
-}
-
-// Validate URL format
-if (supabaseUrl) {
-  try {
-    new URL(supabaseUrl);
-  } catch (error) {
-    console.error('Invalid Supabase URL format:', supabaseUrl);
-    console.error('URL should be in format: https://your-project.supabase.co');
-  }
-}
-
-// Create a fallback client or null if credentials are missing
-export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey, {
+// Create Supabase client with fallback for development
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder-key',
+  {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -39,11 +17,13 @@ export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabase
       'X-Client-Info': 'supabase-js-web',
     },
   },
-}) : null;
+});
 
 // Helper function to check if Supabase is configured
 export const isSupabaseConfigured = () => {
-  return !!(supabaseUrl && supabaseAnonKey && supabase);
+  return !!(supabaseUrl && supabaseAnonKey && 
+    supabaseUrl !== 'https://placeholder.supabase.co' && 
+    supabaseAnonKey !== 'placeholder-key');
 };
 
 // Helper function to get configuration status
@@ -59,8 +39,6 @@ export const getSupabaseConfigStatus = () => {
 
 // Enhanced error handling for common issues
 export const handleSupabaseError = (error: any) => {
-  console.error('Supabase error details:', error);
-  
   // Handle table not found errors
   if (error.code === '42P01' || error.message?.includes('does not exist')) {
     return {
@@ -91,11 +69,7 @@ export const handleSupabaseError = (error: any) => {
   if (error.message?.includes('Failed to fetch')) {
     return {
       type: 'connection',
-      message: 'Unable to connect to Supabase. Please check:\n' +
-               '1. Your internet connection\n' +
-               '2. Supabase project is active and accessible\n' +
-               '3. CORS settings in Supabase dashboard\n' +
-               '4. Environment variables are correct',
+      message: 'Unable to connect to Supabase. Please set up your environment variables in the .env file.',
       suggestions: [
         'Verify VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env file',
         'Check Supabase project status in dashboard',
@@ -143,27 +117,21 @@ export const handleSupabaseError = (error: any) => {
 // Test connection function with better error handling
 export const testConnection = async () => {
   if (!isSupabaseConfigured()) {
-    console.error('Supabase not configured properly', getSupabaseConfigStatus());
     return false;
   }
   
   try {
     // Test with a simple query that should work even with RLS
-    const { data, error } = await supabase!
+    const { data, error } = await supabase
       .from('categories')
       .select('id')
       .limit(1);
       
     if (error) {
-      console.error('Supabase connection test failed:', error);
-      console.error('Error details:', handleSupabaseError(error));
       return false;
     }
-    console.log('Supabase connection test successful', { dataLength: data?.length });
     return true;
   } catch (error) {
-    console.error('Supabase connection test error:', error);
-    console.error('Error details:', handleSupabaseError(error));
     return false;
   }
 };

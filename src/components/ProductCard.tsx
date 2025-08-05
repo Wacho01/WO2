@@ -36,7 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
              e.currentTarget.style.borderColor = '#ccc';
            }}>
         <a 
-          href="/src/ProductView/index.html" 
+          href="/src/ProductView/indexProduct.html" 
           target="_blank" 
           rel="noopener noreferrer" 
           className="block"
