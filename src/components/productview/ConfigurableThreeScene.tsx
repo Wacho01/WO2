@@ -108,12 +108,19 @@ const ConfigurableThreeScene: React.FC<ConfigurableThreeSceneProps> = ({
   // Model loading function
   const loadConfigurableModel = async (loader: GLTFLoader): Promise<THREE.Group> => {
     return new Promise<THREE.Group>((resolve, reject) => {
-      console.log(`Loading model: ${config.model.path}`);
+      let modelPath = config.model.path;
+      
+      // Handle data URL for inlined GLB files
+      if (modelPath.startsWith('data:')) {
+        modelPath = modelPath + '#model.glb';
+      }
+      
+      console.log(`Loading model: ${modelPath}`);
       
       loader.load(
-        config.model.path,
+        modelPath,
         (gltf) => {
-          console.log(`Model loaded successfully: ${config.model.path}`);
+          console.log(`Model loaded successfully: ${modelPath}`);
           const loadedModel = gltf.scene;
           const optimizedModel = optimizeModel(loadedModel);
           resolve(optimizedModel);
@@ -124,7 +131,7 @@ const ConfigurableThreeScene: React.FC<ConfigurableThreeSceneProps> = ({
           console.log('Loading progress:', percentComplete.toFixed(1) + '%');
         },
         (error) => {
-          console.error(`Model loading failed: ${config.model.path}`, error);
+          console.error(`Model loading failed: ${modelPath}`, error);
           reject(error);
         }
       );
