@@ -8,6 +8,7 @@ import ProductGrid from './components/ProductGrid';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import AdminDashboard from './pages/AdminDashboard';
+import ProductViewer from './pages/ProductViewer';
 import { useProducts } from './hooks/useProducts';
 import { useCategories } from './hooks/useCategories';
 
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainCatalog />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/product/:productId" element={<ProductViewer />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

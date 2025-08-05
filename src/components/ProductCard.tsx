@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   title: string;
@@ -19,10 +20,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productNumber,
   onView
 }) => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
     if (onView) {
       onView();
     }
+    // Navigate to the integrated product viewer
+    navigate('/product/rhino');
   };
 
   return (
@@ -35,11 +40,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
            onMouseLeave={(e) => {
              e.currentTarget.style.borderColor = '#ccc';
            }}>
-        <a 
-          href="/src/ProductView/indexProduct.html" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="block"
+        <div 
+          className="block cursor-pointer"
           onClick={handleClick}
         >
           <div className="aspect-[4/3] overflow-hidden rounded-t-lg">
@@ -67,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </p>
             )}
           </div>
-        </a>
+        </div>
       </div>
     </div>
   );
