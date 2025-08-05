@@ -160,7 +160,6 @@ const ConfigurableDimensionsModal: React.FC<ConfigurableDimensionsModalProps> = 
           </div>
         </div>
       </div>
-    </>
   );
 };
 
