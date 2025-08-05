@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Add error boundary and better error handling
 const rootElement = document.getElementById('root');
 
 if (!rootElement) {
@@ -23,7 +22,7 @@ if (!rootElement) {
       <div style="padding: 20px; font-family: Arial; color: red;">
         <h2>Application Error</h2>
         <p>Failed to load the application. Check the browser console for details.</p>
-        <pre>${error}</pre>
+        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto;">${error}</pre>
       </div>
     `;
   }
