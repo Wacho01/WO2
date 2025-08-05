@@ -1,4 +1,6 @@
 import React from 'react';
+import { useState } from 'react';
+import ProductView from './ProductView';
 
 interface ProductCardProps {
   title: string;
@@ -19,28 +21,27 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productNumber,
   onView
 }) => {
+  const [showProductView, setShowProductView] = useState(false);
+
   const handleClick = () => {
     if (onView) {
       onView();
     }
+    setShowProductView(true);
   };
 
   return (
-    <div className="p-2">
-      <div className="bg-white rounded-lg border-2 transition-all duration-300 hover:shadow-lg group" 
-           style={{ borderColor: '#ccc' }}
-           onMouseEnter={(e) => {
-             e.currentTarget.style.borderColor = '#777';
-           }}
-           onMouseLeave={(e) => {
-             e.currentTarget.style.borderColor = '#ccc';
-           }}>
-        <a 
-          href="/src/ProductView/index.html" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="block"
-          onClick={handleClick}
+    <>
+      <div className="p-2">
+        <div className="bg-white rounded-lg border-2 transition-all duration-300 hover:shadow-lg group cursor-pointer" 
+             style={{ borderColor: '#ccc' }}
+             onMouseEnter={(e) => {
+               e.currentTarget.style.borderColor = '#777';
+             }}
+             onMouseLeave={(e) => {
+               e.currentTarget.style.borderColor = '#ccc';
+             }}
+             onClick={handleClick}
         >
           <div className="aspect-[4/3] overflow-hidden rounded-t-lg">
             <img
@@ -67,9 +68,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </p>
             )}
           </div>
-        </a>
+        </div>
       </div>
-    </div>
+
+      {/* Product View Modal */}
+      {showProductView && (
+        <ProductView onClose={() => setShowProductView(false)} />
+      )}
+    </>
   );
 };
 
