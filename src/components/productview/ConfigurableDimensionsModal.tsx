@@ -160,7 +160,8 @@ const ConfigurableDimensionsModal: React.FC<ConfigurableDimensionsModalProps> = 
           </div>
         </div>
       </div>
+    </div>
   );
 };
 
-export default ConfigurableControlPanel;
+export default ConfigurableDimensionsModal;
