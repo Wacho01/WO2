@@ -17,6 +17,9 @@ export default defineConfig({
         main: resolve(__dirname, 'indexProduct.html'),
         water: resolve(__dirname, 'public/WATER.html')
       }
+    },
+    esbuildOptions: {
+      target: 'esnext'
     }
   },
   optimizeDeps: {
@@ -29,9 +32,5 @@ export default defineConfig({
       'three/addons': resolve(__dirname, '../../node_modules/three/examples/jsm')
     }
   },
-  assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.png', '**/*.jpg', '**/*.svg'],
-    esbuildOptions: {
-      target: 'esnext'
-    }
-  }
+  assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.png', '**/*.jpg', '**/*.svg']
 });
